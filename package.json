@@ -18,6 +18,9 @@
   "homepage": "https://github.com/PrakulPShetty/banking-web-app#readme",
   "description": "",
   "dependencies": {
-    "i": "^0.3.7"
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "i": "^0.3.7",
+    "pg": "^8.16.3"
   }
 }
