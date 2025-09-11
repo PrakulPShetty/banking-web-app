@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVA Banking Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Gradient Animation */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .animated-bg {
+      background: linear-gradient(270deg, #f8fafc, #e0f2fe, #bfdbfe, #f8fafc);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+    }
+  </style>
+</head>
+<body class="animated-bg text-gray-900">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <img src="/NOVA BANK.png" alt="NOVA Banking Logo" class="h-10 w-10 object-contain mr-2">
+        <span class="text-blue-900 text-xl font-bold tracking-wide">NOVA BANKING</span>
+      </div>
+      <!-- User Menu -->
+      <div class="flex items-center space-x-6">
+        <span class="text-gray-700 font-medium">Welcome, <%= username %></span>
+        <button class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar + Main -->
+  <div class="flex pt-20 min-h-screen">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg border-r border-gray-200 p-6">
+      <h2 class="text-lg font-semibold text-blue-900 mb-6">Dashboard Menu</h2>
+      <ul class="space-y-4">
+        <li><a href="#" class="block text-gray-700 hover:text-blue-900 font-medium">🏠 Home</a></li>
+        <li><a href="#" class="block text-gray-700 hover:text-blue-900 font-medium">👤 Profile</a></li>
+        <li><a href="#" class="block text-gray-700 hover:text-blue-900 font-medium">💳 Accounts</a></li>
+        <li><a href="#" class="block text-gray-700 hover:text-blue-900 font-medium">📊 Transactions</a></li>
+        <li><a href="#" class="block text-gray-700 hover:text-blue-900 font-medium">📈 Reports</a></li>
+        <li><a href="#" class="block text-gray-700 hover:text-blue-900 font-medium">⚙ Settings</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+      <!-- Page Heading -->
+      <h1 class="text-2xl font-bold text-blue-900 mb-6">Employee Dashboard</h1>
+
+      <!-- Cards Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Accounts Card -->
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition">
+          <h3 class="text-lg font-semibold text-blue-900 mb-3">Accounts</h3>
+          <p class="text-gray-600">View and manage customer accounts.</p>
+          <button class="mt-4 bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800">View Accounts</button>
+        </div>
+
+        <!-- Transactions Card -->
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition">
+          <h3 class="text-lg font-semibold text-blue-900 mb-3">Transactions</h3>
+          <p class="text-gray-600">Monitor and approve transactions.</p>
+          <button class="mt-4 bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800">View Transactions</button>
+        </div>
+
+        <!-- Reports Card -->
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition">
+          <h3 class="text-lg font-semibold text-blue-900 mb-3">Reports</h3>
+          <p class="text-gray-600">Generate financial and activity reports.</p>
+          <button class="mt-4 bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800">Generate Report</button>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="mt-10 bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-blue-900 mb-4">Recent Activity</h3>
+        <ul class="space-y-3 text-gray-700">
+          <li>✅ Account created for Customer #12345</li>
+          <li>💳 Transaction of ₹25,000 approved</li>
+          <li>📊 Report generated for Q3 2025</li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
