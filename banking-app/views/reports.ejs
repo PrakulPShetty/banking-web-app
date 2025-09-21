@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reports</title>
+  <style>
+    body { background:#1e1e1e; color:#fff; font-family: Arial; padding:20px; }
+    h1 { text-align:center; color:#00adb5; }
+    .cards { display:flex; gap:20px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+    .card { background:#2a2a2a; padding:20px; border-radius:10px; text-align:center; min-width:150px; box-shadow:0 4px 10px rgba(0,0,0,0.6);}
+    .card h3 { margin:0 0 10px 0; color:#00adb5; }
+  </style>
+</head>
+<body>
+  <h1>Reports</h1>
+  <div class="cards">
+    <div class="card"><h3>Total Employees</h3><p><%= totalEmployees %></p></div>
+    <div class="card"><h3>Total Salary</h3><p>₹<%= totalSalary %></p></div>
+    <div class="card"><h3>Managers</h3><p><%= managers %></p></div>
+    <div class="card"><h3>Cashiers</h3><p><%= cashiers %></p></div>
+  </div>
+ <button 
+  onclick="window.location.href='/manager'" 
+  style="display:block; margin:20px auto; padding:10px 20px; background:#00adb5; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px;">
+  Back to Dashboard
+</button>
+
+</html>
