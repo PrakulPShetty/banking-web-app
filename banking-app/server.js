@@ -92,10 +92,15 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Logout
+// ✅ Logout Route
 app.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.redirect("/login");
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return res.send("Error logging out");
+    }
+    res.redirect("/login");
+  });
 });
 
 // Manager Dashboard (protected)
@@ -126,19 +131,6 @@ app.post("/add-employee", isAuthenticated, async (req, res) => {
     res.send("Error adding employee");
   }
 });
-
-// Logout route
-app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error destroying session:", err);
-      return res.send("Error logging out");
-    }
-    // Redirect to login page after logout
-    res.redirect("/login");
-  });
-});
-
 
 // Delete Employee
 app.post("/delete-employee/:id", isAuthenticated, async (req, res) => {
