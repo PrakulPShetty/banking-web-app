@@ -1,4 +1,4 @@
-import express from "express";
+import express from "express"; 
 import bodyParser from "body-parser";
 import pg from "pg";
 import dotenv from "dotenv";
@@ -42,14 +42,10 @@ function isAuthenticated(req, res, next) {
 }
 
 // Root → redirect to login
-app.get("/", (req, res) => {
-  res.redirect("/login");
-});
+app.get("/", (req, res) => res.redirect("/login"));
 
 // Manager Signup
-app.get("/signup", (req, res) => {
-  res.render("signup");
-});
+app.get("/signup", (req, res) => res.render("signup"));
 
 app.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
@@ -67,9 +63,7 @@ app.post("/signup", async (req, res) => {
 });
 
 // Manager Login
-app.get("/login", (req, res) => {
-  res.render("login");
-});
+app.get("/login", (req, res) => res.render("login"));
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -92,21 +86,18 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Logout Route
+// Logout
 app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error destroying session:", err);
-      return res.send("Error logging out");
-    }
+  req.session.destroy(err => {
+    if (err) return res.send("Error logging out");
     res.redirect("/login");
   });
 });
 
-// Manager Dashboard (protected)
+// Manager Dashboard
 app.get("/manager", isAuthenticated, async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM employees");
+    const result = await db.query("SELECT * FROM employees_credentials");
     res.render("manager", { 
       employees: result.rows,
       managerName: req.session.managerName
@@ -119,16 +110,22 @@ app.get("/manager", isAuthenticated, async (req, res) => {
 
 // Add Employee
 app.post("/add-employee", isAuthenticated, async (req, res) => {
-  const { name, email, role, salary } = req.body;
+  const { username, name, email, role, salary, password } = req.body;
+
+  if (!username || !name || !email || !role || !salary || !password) {
+    return res.send("All fields are required to add an employee");
+  }
+
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     await db.query(
-      "INSERT INTO employees (name, email, role, salary) VALUES ($1, $2, $3, $4)",
-      [name, email, role, salary]
+      "INSERT INTO employees_credentials (username, name, email, role, salary, password) VALUES ($1, $2, $3, $4, $5, $6)",
+      [username, name, email, role, salary, hashedPassword]
     );
     res.redirect("/manager");
   } catch (err) {
     console.error(err);
-    res.send("Error adding employee");
+    res.send("Error adding employee. Try again later.");
   }
 });
 
@@ -136,7 +133,7 @@ app.post("/add-employee", isAuthenticated, async (req, res) => {
 app.post("/delete-employee/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
   try {
-    await db.query("DELETE FROM employees WHERE id=$1", [id]);
+    await db.query("DELETE FROM employees_credentials WHERE id=$1", [id]);
     res.redirect("/manager");
   } catch (err) {
     console.error(err);
@@ -147,12 +144,19 @@ app.post("/delete-employee/:id", isAuthenticated, async (req, res) => {
 // Edit Employee
 app.post("/edit-employee/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
-  const { name, email, role, salary } = req.body;
+  const { username, name, email, role, salary, password } = req.body;
+
   try {
-    await db.query(
-      "UPDATE employees SET name=$1, email=$2, role=$3, salary=$4 WHERE id=$5",
-      [name, email, role, salary, id]
-    );
+    let query, params;
+    if (password && password.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      query = "UPDATE employees_credentials SET username=$1, name=$2, email=$3, role=$4, salary=$5, password=$6 WHERE id=$7";
+      params = [username, name, email, role, salary, hashedPassword, id];
+    } else {
+      query = "UPDATE employees_credentials SET username=$1, name=$2, email=$3, role=$4, salary=$5 WHERE id=$6";
+      params = [username, name, email, role, salary, id];
+    }
+    await db.query(query, params);
     res.redirect("/manager");
   } catch (err) {
     console.error(err);
@@ -163,7 +167,7 @@ app.post("/edit-employee/:id", isAuthenticated, async (req, res) => {
 // Employee List Page
 app.get("/employees", isAuthenticated, async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM employees");
+    const result = await db.query("SELECT * FROM employees_credentials");
     res.render("employee", { employees: result.rows });
   } catch (err) {
     console.error(err);
@@ -174,18 +178,38 @@ app.get("/employees", isAuthenticated, async (req, res) => {
 // Reports Page
 app.get("/reports", isAuthenticated, async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM employees");
+    const result = await db.query("SELECT * FROM employees_credentials");
+
     const totalEmployees = result.rows.length;
     const totalSalary = result.rows.reduce((a, b) => a + parseFloat(b.salary), 0);
+
     const managers = result.rows.filter(e => e.role === "Manager").length;
     const cashiers = result.rows.filter(e => e.role === "Cashier").length;
-    res.render("reports", { totalEmployees, totalSalary, managers, cashiers });
+    const accountants = result.rows.filter(e => e.role === "Accountant").length;
+    const clerks = result.rows.filter(e => e.role === "Clerk").length;
+    const itSupport = result.rows.filter(e => e.role === "IT Support").length;
+
+    res.render("reports", { 
+      totalEmployees, 
+      totalSalary, 
+      managers, 
+      cashiers, 
+      accountants, 
+      clerks, 
+      itSupport 
+    });
   } catch (err) {
     console.error(err);
-    res.render("reports", { totalEmployees: 0, totalSalary: 0, managers: 0, cashiers: 0 });
+    res.render("reports", { 
+      totalEmployees: 0, 
+      totalSalary: 0, 
+      managers: 0, 
+      cashiers: 0, 
+      accountants: 0, 
+      clerks: 0, 
+      itSupport: 0
+    });
   }
 });
 
-app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`🚀 Server running at http://localhost:${port}`));

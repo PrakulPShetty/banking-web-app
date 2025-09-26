@@ -2,26 +2,73 @@
 <html>
 <head>
   <title>Reports</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background:#1e1e1e; color:#fff; font-family: Arial; padding:20px; }
-    h1 { text-align:center; color:#00adb5; }
-    .cards { display:flex; gap:20px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
-    .card { background:#2a2a2a; padding:20px; border-radius:10px; text-align:center; min-width:150px; box-shadow:0 4px 10px rgba(0,0,0,0.6);}
+    body { margin:0; font-family: Arial; background:#1e1e1e; color:#fff; }
+    .navbar { height:60px; background:#2a2a2a; display:flex; align-items:center; justify-content:space-between; padding:0 20px; border-bottom:1px solid #333; }
+    .navbar h2 { margin:0; }
+    .main { padding:20px; }
+    .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:20px; }
+    .card { background:#2a2a2a; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.6); text-align:center; }
     .card h3 { margin:0 0 10px 0; color:#00adb5; }
+    .back-btn { display:inline-block; margin-top:20px; padding:10px 20px; background:#00adb5; color:#fff; text-decoration:none; border-radius:5px; }
+    .back-btn:hover { background:#019ca5; }
   </style>
 </head>
 <body>
-  <h1>Reports</h1>
-  <div class="cards">
-    <div class="card"><h3>Total Employees</h3><p><%= totalEmployees %></p></div>
-    <div class="card"><h3>Total Salary</h3><p>₹<%= totalSalary %></p></div>
-    <div class="card"><h3>Managers</h3><p><%= managers %></p></div>
-    <div class="card"><h3>Cashiers</h3><p><%= cashiers %></p></div>
-  </div>
- <button 
-  onclick="window.location.href='/manager'" 
-  style="display:block; margin:20px auto; padding:10px 20px; background:#00adb5; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px;">
-  Back to Dashboard
-</button>
 
+<div class="navbar">
+  <h2>Reports</h2>
+  <a href="/manager" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+</div>
+
+<div class="main">
+  <div class="cards">
+    <div class="card"><h3>Total Employees</h3><p id="totalEmployees">0</p></div>
+    <div class="card"><h3>Total Salary</h3><p id="totalSalary">0</p></div>
+    <div class="card"><h3>Managers</h3><p id="totalManagers">0</p></div>
+    <div class="card"><h3>Cashiers</h3><p id="totalCashiers">0</p></div>
+    <div class="card"><h3>Accountants</h3><p id="totalAccountants">0</p></div>
+    <div class="card"><h3>Clerks</h3><p id="totalClerks">0</p></div>
+    <div class="card"><h3>IT Support</h3><p id="totalIT">0</p></div>
+  </div>
+</div>
+
+<script>
+  // Values passed from server
+  const data = {
+    totalEmployees: <%= totalEmployees %>,
+    totalSalary: <%= totalSalary %>,
+    totalManagers: <%= managers %>,
+    totalCashiers: <%= cashiers %>,
+    totalAccountants: <%= accountants %>,
+    totalClerks: <%= clerks %>,
+    totalIT: <%= itSupport %>
+  };
+
+  function animateCounter(id, value) {
+    const el = document.getElementById(id);
+    let current = 0;
+    const increment = value / 50; // 50 steps
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= value) {
+        el.innerText = id === "totalSalary" ? "₹" + value : value;
+        clearInterval(interval);
+      } else {
+        el.innerText = id === "totalSalary" ? "₹" + Math.floor(current) : Math.floor(current);
+      }
+    }, 20);
+  }
+
+  animateCounter("totalEmployees", data.totalEmployees);
+  animateCounter("totalSalary", data.totalSalary);
+  animateCounter("totalManagers", data.totalManagers);
+  animateCounter("totalCashiers", data.totalCashiers);
+  animateCounter("totalAccountants", data.totalAccountants);
+  animateCounter("totalClerks", data.totalClerks);
+  animateCounter("totalIT", data.totalIT);
+</script>
+
+</body>
 </html>
