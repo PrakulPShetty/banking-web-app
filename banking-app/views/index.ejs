@@ -1,0 +1,42 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bank Portal</title>
+  <style>
+    body { 
+      background: #1e1e1e; 
+      color: #fff; 
+      font-family: Arial, sans-serif; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+    }
+    a { 
+      margin: 20px; 
+      padding: 15px 30px; 
+      background: #00adb5; 
+      color: #fff; 
+      text-decoration: none; 
+      border-radius: 5px; 
+      font-size: 18px;
+      transition: 0.3s;
+    }
+    a:hover {
+      background: #009ca8;
+    }
+    h1 {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Bank Portal</h1>
+  <div>
+    <a href="/employee-login">Employee Login</a>
+    <a href="/login">Manager Login</a>
+  </div>
+</body>
+</html>

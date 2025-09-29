@@ -32,19 +32,24 @@ db.connect()
   .then(() => console.log("✅ Connected to PostgreSQL"))
   .catch((err) => console.error("❌ DB connection error:", err));
 
-// Middleware to protect routes
+// Middleware to protect manager routes
 function isAuthenticated(req, res, next) {
-  if (req.session.managerId) {
-    return next();
-  } else {
-    res.redirect("/login");
-  }
+  if (req.session.managerId) return next();
+  res.redirect("/login");
 }
 
-// Root → redirect to login
-app.get("/", (req, res) => res.redirect("/login"));
+// Middleware to protect employee routes
+function isEmployee(req, res, next) {
+  if (req.session.employeeId) return next();
+  res.redirect("/employee-login");
+}
 
-// Manager Signup
+// Root → Landing Page
+app.get("/", (req, res) => res.render("index"));
+
+// ---------------- MANAGER ROUTES ---------------- //
+
+// Signup
 app.get("/signup", (req, res) => res.render("signup"));
 
 app.post("/signup", async (req, res) => {
@@ -62,7 +67,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// Manager Login
+// Login
 app.get("/login", (req, res) => res.render("login"));
 
 app.post("/login", async (req, res) => {
@@ -90,7 +95,7 @@ app.post("/login", async (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy(err => {
     if (err) return res.send("Error logging out");
-    res.redirect("/login");
+    res.redirect("/");
   });
 });
 
@@ -111,10 +116,7 @@ app.get("/manager", isAuthenticated, async (req, res) => {
 // Add Employee
 app.post("/add-employee", isAuthenticated, async (req, res) => {
   const { username, name, email, role, salary, password } = req.body;
-
-  if (!username || !name || !email || !role || !salary || !password) {
-    return res.send("All fields are required to add an employee");
-  }
+  if (!username || !name || !email || !role || !salary || !password) return res.send("All fields are required");
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -164,14 +166,28 @@ app.post("/edit-employee/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-// Employee List Page
+// View all employees (for manager)
 app.get("/employees", isAuthenticated, async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM employees_credentials");
     res.render("employee", { employees: result.rows });
   } catch (err) {
     console.error(err);
-    res.render("employee", { employees: [] });
+    res.send("Error fetching employees");
+  }
+});
+
+
+// View single employee
+app.get("/view-employee/:id", isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query("SELECT * FROM employees_credentials WHERE id=$1", [id]);
+    if (result.rows.length === 0) return res.send("Employee not found");
+    res.render("viewEmployee", { employee: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.send("Error fetching employee details");
   }
 });
 
@@ -179,9 +195,8 @@ app.get("/employees", isAuthenticated, async (req, res) => {
 app.get("/reports", isAuthenticated, async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM employees_credentials");
-
     const totalEmployees = result.rows.length;
-    const totalSalary = result.rows.reduce((a, b) => a + parseFloat(b.salary), 0);
+    const totalSalary = result.rows.reduce((sum, e) => sum + parseFloat(e.salary), 0);
 
     const managers = result.rows.filter(e => e.role === "Manager").length;
     const cashiers = result.rows.filter(e => e.role === "Cashier").length;
@@ -190,26 +205,71 @@ app.get("/reports", isAuthenticated, async (req, res) => {
     const itSupport = result.rows.filter(e => e.role === "IT Support").length;
 
     res.render("reports", { 
-      totalEmployees, 
-      totalSalary, 
-      managers, 
-      cashiers, 
-      accountants, 
-      clerks, 
-      itSupport 
+      totalEmployees, totalSalary, managers, cashiers, accountants, clerks, itSupport 
     });
   } catch (err) {
     console.error(err);
     res.render("reports", { 
-      totalEmployees: 0, 
-      totalSalary: 0, 
-      managers: 0, 
-      cashiers: 0, 
-      accountants: 0, 
-      clerks: 0, 
-      itSupport: 0
+      totalEmployees: 0, totalSalary: 0, managers: 0, cashiers: 0, accountants: 0, clerks: 0, itSupport: 0 
     });
   }
 });
+
+// ---------------- EMPLOYEE ROUTES ---------------- //
+
+app.get("/employee-login", (req, res) => res.render("employeeLogin", { error: null }));
+
+app.post("/employee-login", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const result = await db.query("SELECT * FROM employees_credentials WHERE username=$1", [username]);
+    if (result.rows.length === 0) return res.render("employeeLogin", { error: "Employee not found" });
+
+    const employee = result.rows[0];
+    const match = await bcrypt.compare(password, employee.password);
+    if (match) {
+      req.session.employeeId = employee.id;
+      req.session.employeeName = employee.name;
+      req.session.employeeUsername = employee.username;
+      res.redirect("/employee-dashboard");
+    } else {
+      res.render("employeeLogin", { error: "Invalid password" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.render("employeeLogin", { error: "Error during login. Try again later." });
+  }
+});
+
+
+
+// Employee Dashboard
+app.get("/employee-dashboard", isEmployee, async (req, res) => {
+  try {
+    // Fetch full employee details from DB
+    const result = await db.query(
+      "SELECT * FROM employees_credentials WHERE id=$1",
+      [req.session.employeeId]
+    );
+
+    if (result.rows.length === 0) return res.send("Employee not found");
+
+    // Pass the full employee object to EJS
+    res.render("employeeDashboard", { employee: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.send("Error fetching employee details");
+  }
+});
+
+// Employee Logout
+app.get("/employee-logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) return res.send("Error logging out");
+    res.redirect("/");
+  });
+});
+
+// ---------------- SERVER ---------------- //
 
 app.listen(port, () => console.log(`🚀 Server running at http://localhost:${port}`));
