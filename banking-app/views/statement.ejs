@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer Statement</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      color: #00adb5;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #444;
+    }
+
+    th {
+      background: #00adb5;
+      color: #fff;
+      border-radius: 6px;
+    }
+
+    tr:hover {
+      background: #333;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #00adb5;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      background: #019ca5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Statement for Account: <%= account_no %></h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% transactions.forEach(tx => { %>
+          <tr>
+            <td><%= tx.date %></td>
+            <td><%= tx.type %></td>
+            <td>₹<%= tx.amount %></td>
+            <td>₹<%= tx.balance %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <a href="/employee-dashboard" class="back-link"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+  </div>
+</body>
+</html>

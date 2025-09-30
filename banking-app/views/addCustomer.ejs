@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Customer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background:#1e1e1e; color:#fff; font-family:Arial; padding:20px; }
+    .card { background:#2a2a2a; padding:20px; border-radius:10px; width:400px; margin:auto; }
+    input, button { width:100%; padding:10px; margin:8px 0; border:none; border-radius:5px; }
+    input { background:#333; color:#fff; }
+    button { background:#00adb5; color:#fff; cursor:pointer; }
+    button:hover { background:#00929b; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Add Customer</h2>
+    <form action="/employee/add-customer" method="POST">
+      <input type="text" name="name" placeholder="Customer Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="text" name="account_no" placeholder="Account Number" required>
+      <input type="number" name="balance" placeholder="Initial Balance" required>
+      <button type="submit">Add Customer</button>
+    </form>
+     <a href="/employee-dashboard" class="back-link"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Daily Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #2a2a2a;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: #00adb5;
+      margin-bottom: 25px;
+    }
+
+    .report-card {
+      background: #333;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      font-size: 16px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #00adb5;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      color: #019ca5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Daily Report</h2>
+
+    <div class="report-card">
+      <i class="fa fa-exchange-alt"></i> Total Transactions Today: <strong><%= report.totalTransactions %></strong>
+    </div>
+    <div class="report-card">
+      <i class="fa fa-arrow-down"></i> Total Deposits: <strong>₹<%= report.totalDeposits %></strong>
+    </div>
+    <div class="report-card">
+      <i class="fa fa-arrow-up"></i> Total Withdrawals: <strong>₹<%= report.totalWithdrawals %></strong>
+    </div>
+
+    <a href="/employee-dashboard" class="back-link"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+  </div>
+</body>
+</html>

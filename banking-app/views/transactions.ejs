@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Transactions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { 
+      background:#1e1e1e; 
+      color:#fff; 
+      font-family:Arial; 
+      padding:20px; 
+    }
+
+    .card { 
+      background:#2a2a2a; 
+      padding:20px; 
+      border-radius:10px; 
+      width:400px; 
+      margin:auto; 
+      box-shadow:0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    input, select, button { 
+      width:100%; 
+      padding:10px; 
+      margin:8px 0; 
+      border:none; 
+      border-radius:5px; 
+      box-sizing: border-box;
+    }
+
+    input, select { 
+      background:#333; 
+      color:#fff; 
+    }
+
+    button { 
+      background:#00adb5; 
+      color:#fff; 
+      cursor:pointer; 
+      transition:0.3s;
+    }
+
+    button:hover { 
+      background:#00929b; 
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 15px;
+      background: #00adb5;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: 0.3s;
+      text-align: center;
+    }
+
+    .back-link:hover {
+      background: #019ca5;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Transaction</h2>
+    <form action="/employee/transactions" method="POST">
+      <select name="type" required>
+        <option value="">Select Transaction Type</option>
+        <option value="deposit">Deposit</option>
+        <option value="withdraw">Withdraw</option>
+        <option value="transfer">Transfer</option>
+      </select>
+      <input type="text" name="account_no" placeholder="Account Number" required>
+      <input type="number" name="amount" placeholder="Amount" required>
+      <input type="text" name="to_account" placeholder="To Account (for transfer)">
+      <button type="submit">Process Transaction</button>
+    </form>
+    <a href="/employee-dashboard" class="back-link"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+  </div>
+</body>
+</html>
