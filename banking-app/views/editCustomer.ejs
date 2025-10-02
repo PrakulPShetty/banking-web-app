@@ -4,98 +4,62 @@
   <title>Edit Customer</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Global Styles */
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #1e1e1e;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background:#1e1e1e; color:#fff; font-family:Arial, sans-serif; padding:20px;
     }
-
-    /* Card container */
     .card {
-      background: #2a2a2a;
-      padding: 30px;
-      border-radius: 12px;
-      width: 400px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transition: transform 0.2s;
+      background:#2a2a2a; padding:30px; border-radius:12px; width:800px; margin:auto; box-shadow:0 4px 12px rgba(0,0,0,0.5);
     }
-
-    .card:hover {
-      transform: translateY(-5px);
+    h2 { text-align:center; color:#00adb5; margin-bottom:20px; }
+    input, textarea, button {
+      width:100%; padding:12px; margin:8px 0; border:none; border-radius:8px; font-size:16px;
     }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #00adb5;
-    }
-
-    /* Input fields */
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-      background: #333;
-      color: #fff;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-
-    input:focus {
-      outline: none;
-      box-shadow: 0 0 5px #00adb5;
-    }
-
-    /* Buttons */
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 8px;
-      background: #00adb5;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #019ca5;
-    }
-
-    /* Back link */
-    .back-link {
-      display: block;
-      margin-top: 15px;
-      text-align: center;
-      color: #00adb5;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .back-link:hover {
-      color: #019ca5;
-    }
+    input, textarea { background:#333; color:#fff; }
+    button { background:#00adb5; color:#fff; cursor:pointer; transition:0.3s; }
+    button:hover { background:#019ca5; }
+    .back-link { display:block; margin-top:15px; text-align:center; color:#00adb5; text-decoration:none; }
+    .back-link:hover { color:#019ca5; }
+    .delete-btn { background:#ff4d4d; margin-top:10px; }
+    .delete-btn:hover { background:#ff0000; }
   </style>
 </head>
 <body>
   <div class="card">
     <h2>Edit Customer</h2>
-    <form action="/employee/edit-customer/<%= customer.id %>" method="POST">
-      <input type="text" name="name" value="<%= customer.name %>" placeholder="Customer Name" required>
-      <input type="email" name="email" value="<%= customer.email %>" placeholder="Email" required>
-      <input type="number" name="balance" value="<%= customer.balance %>" placeholder="Balance" required>
-      <button type="submit"><i class="fa fa-save"></i> Update</button>
-    </form>
+
+    <% if (!customer) { %>
+      <!-- Step 1: Enter Account No & Name -->
+      <% if (error) { %>
+        <p style="color:red;"><%= error %></p>
+      <% } %>
+      <form action="/employee/edit-customer" method="POST">
+        <input type="text" name="account_no" placeholder="Account Number" required>
+        <input type="text" name="fullname" placeholder="Full Name" required>
+        <button type="submit"><i class="fa fa-search"></i> Search Customer</button>
+      </form>
+    <% } else { %>
+      <!-- Step 2: Show pre-filled form for editing -->
+      <form action="/employee/edit-customer/<%= customer.customer_id %>" method="POST">
+        <input type="text" name="fullname" value="<%= customer.fullname %>" placeholder="Full Name" required>
+        <input type="email" name="email" value="<%= customer.email %>" placeholder="Email" required>
+        <input type="text" name="phone" value="<%= customer.phone %>" placeholder="Phone" required>
+        <input type="text" name="aadhar" value="<%= customer.aadhar %>" placeholder="Aadhar" required>
+        <input type="text" name="address" value="<%= customer.address %>" placeholder="Address" required>
+        <input type="text" name="city" value="<%= customer.city %>" placeholder="City" required>
+        <input type="text" name="state" value="<%= customer.state %>" placeholder="State" required>
+        <input type="number" name="pincode" value="<%= customer.pincode %>" placeholder="Pincode" required>
+        <input type="number" name="balance" value="<%= customer.balance %>" placeholder="Balance" required>
+        <button type="submit"><i class="fa fa-save"></i> Update</button>
+      </form>
+
+      <!-- Delete button -->
+      <form action="/employee/delete-customer/<%= customer.customer_id %>" method="POST">
+        <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this account?')">
+          <i class="fa fa-trash"></i> Delete Account
+        </button>
+      </form>
+    <% } %>
+
     <a href="/employee-dashboard" class="back-link"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
   </div>
 </body>

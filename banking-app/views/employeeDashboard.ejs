@@ -61,14 +61,20 @@
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
+ <!-- Sidebar -->
+<div class="sidebar">
   <a href="/employee-dashboard"><i class="fa fa-home"></i> Dashboard</a>
   <a href="/employee/add-customer"><i class="fa fa-user-plus"></i> Add Customer</a>
-  <a href="/employee/edit-customer/1"><i class="fa fa-edit"></i> Edit Customer</a> <!-- sample with id -->
+
+  <!-- Remove Edit link unless customer exists -->
+  <% if (typeof customer !== 'undefined' && customer) { %>
+    <a href="/employee/edit-customer/<%= customer.customer_id %>">Edit</a>
+  <% } %>
+
+  <a href="/employee/view-customer"><i class="fa fa-search"></i> View Customer</a>
   <a href="/employee/transactions"><i class="fa fa-exchange-alt"></i> Transactions</a>
   <a href="/employee/daily-report"><i class="fa fa-calendar-day"></i> Daily Report</a>
-  <a href="/employee/statement/12345"><i class="fa fa-file-alt"></i> Statement</a> <!-- sample account_no -->
+  <a href="/employee/statement/12345"><i class="fa fa-file-alt"></i> Statement</a>
   <a href="/employee/reports"><i class="fa fa-chart-line"></i> Reports</a>
   <a href="/employee-logout"><i class="fa fa-sign-out-alt"></i> Logout</a>
 </div>

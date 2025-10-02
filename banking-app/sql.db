@@ -16,12 +16,20 @@ CREATE TABLE employees_credentials (
     password VARCHAR(255) NOT NULL        
 );
 
-CREATE TABLE  customers (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    account_no VARCHAR(20) UNIQUE NOT NULL,
-    balance NUMERIC(12,2) DEFAULT 0,
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,         -- Auto increment unique ID
+    account_no VARCHAR(20) UNIQUE NOT NULL, -- Auto-generated like novabank001
+    fullname VARCHAR(100) NOT NULL,
+    dob DATE NOT NULL,
+    parents_name VARCHAR(100) NOT NULL,     -- Father/Mother’s name
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(15) NOT NULL UNIQUE,
+    aadhar VARCHAR(20) NOT NULL UNIQUE,
+    address TEXT NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    state VARCHAR(50) NOT NULL,
+    pincode VARCHAR(10) NOT NULL,
+    balance DECIMAL(12,2) DEFAULT 0.00,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

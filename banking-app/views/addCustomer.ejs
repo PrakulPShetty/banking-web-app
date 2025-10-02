@@ -4,25 +4,129 @@
   <title>Add Customer</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background:#1e1e1e; color:#fff; font-family:Arial; padding:20px; }
-    .card { background:#2a2a2a; padding:20px; border-radius:10px; width:400px; margin:auto; }
-    input, button { width:100%; padding:10px; margin:8px 0; border:none; border-radius:5px; }
-    input { background:#333; color:#fff; }
-    button { background:#00adb5; color:#fff; cursor:pointer; }
-    button:hover { background:#00929b; }
+    body {
+      background:#1e1e1e;
+      color:#fff;
+      font-family:Arial, sans-serif;
+      padding:20px;
+    }
+    .card {
+      background:#2a2a2a;
+      padding:40px;
+      border-radius:12px;
+      width:1000px;   /* Increased width */
+      margin:auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 columns */
+      gap: 30px 40px; /* row gap 30px, column gap 40px */
+    }
+    input, textarea, button {
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:6px;
+      margin-top:6px;
+      font-size:15px;
+    }
+    input, textarea {
+      background:#333;
+      color:#fff;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    button {
+      width:200px;        /* reduced width */
+      padding:14px;
+      border:none;
+      border-radius:6px;
+      font-size:16px;
+      font-weight:bold;
+      background:#00adb5;
+      color:#fff;
+      cursor:pointer;
+      transition:0.3s;
+    }
+    button:hover {
+      background:#00929b;
+    }
+    .form-actions {
+      margin-top:30px;
+      text-align:center;
+    }
+    .back-link {
+      display:inline-block;
+      margin-top:20px;
+      color:#00adb5;
+      text-decoration:none;
+      font-size:14px;
+    }
+    .back-link:hover {
+      text-decoration:underline;
+    }
+    h2 {
+      text-align:center;
+      margin-bottom:30px;
+    }
+    .error-msg {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+      grid-column: span 2; /* span across both columns */
+      text-align: center;
+    }
+    .success-msg {
+      color: lightgreen;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <div class="card">
+
+    <% if (success) { %>
+      <p class="success-msg"><%= success %></p>
+    <% } %>
+
     <h2>Add Customer</h2>
     <form action="/employee/add-customer" method="POST">
-      <input type="text" name="name" placeholder="Customer Name" required>
-      <input type="email" name="email" placeholder="Email" required>
-      <input type="text" name="account_no" placeholder="Account Number" required>
-      <input type="number" name="balance" placeholder="Initial Balance" required>
-      <button type="submit">Add Customer</button>
+      <div class="form-grid">
+        <input type="text" name="fullname" placeholder="Full Name" required>
+        <input type="date" name="dob" placeholder="Date of Birth" required>
+
+        <input type="text" name="lineage" placeholder="Father/Mother's Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="text" name="phone" placeholder="Phone Number" required>
+        <input type="text" name="aadhar" placeholder="Aadhar Number" required>
+
+        <textarea name="address" placeholder="Full Address" required></textarea>
+        <input type="text" name="city" placeholder="City" required>
+
+        <input type="text" name="state" placeholder="State" required>
+        <input type="number" name="pincode" placeholder="Pincode" required>
+
+
+        <input type="number" name="balance" placeholder="Enter Initial Balance" min="500" required>
+
+        <% if (error) { %>
+          <p class="error-msg"><%= error %></p>
+        <% } %>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit">Add Customer</button>
+      </div>
     </form>
-     <a href="/employee-dashboard" class="back-link"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+    <a href="/employee-dashboard" class="back-link">
+      <i class="fa fa-arrow-left"></i> Back to Dashboard
+    </a>
   </div>
 </body>
 </html>
