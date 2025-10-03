@@ -220,13 +220,22 @@ app.get("/employee-login", (req, res) => res.render("employeeLogin", { error: nu
 
 app.post("/employee-login", async (req, res) => {
   const { username, password } = req.body;
+
   try {
-    const result = await db.query("SELECT * FROM employees_credentials WHERE username=$1", [username]);
-    if (result.rows.length === 0) 
+    const result = await db.query(
+      "SELECT * FROM employees_credentials WHERE username=$1", 
+      [username.trim()]
+    );
+
+    console.log("Employee search result:", result.rows); // DEBUG
+
+    if (result.rows.length === 0) {
       return res.render("employeeLogin", { error: "Employee not found" });
+    }
 
     const employee = result.rows[0];
     const match = await bcrypt.compare(password, employee.password);
+
     if (match) {
       req.session.employee = {
         id: employee.id,
@@ -235,15 +244,17 @@ app.post("/employee-login", async (req, res) => {
         role: employee.role,
         email: employee.email
       };
-      res.redirect("/employee-dashboard");
+      return res.redirect("/employee-dashboard");
     } else {
-      res.render("employeeLogin", { error: "Invalid password" });
+      return res.render("employeeLogin", { error: "Invalid password" });
     }
+
   } catch (err) {
-    console.error(err);
-    res.render("employeeLogin", { error: "Error during login. Try again later." });
+    console.error("Login error:", err);
+    return res.render("employeeLogin", { error: "Error during login. Try again later." });
   }
 });
+
 
 // Employee Dashboard
 app.get("/employee-dashboard", isEmployee, (req, res) => {
@@ -369,6 +380,72 @@ app.post("/employee/view-customer", isEmployee, async (req, res) => {
     res.send("Error fetching customer details");
   }
 });
+
+
+// ---------------- EDIT CUSTOMER PAGE ---------------- //
+
+// Show form to search customer
+app.get("/employee/edit-customer", isEmployee, (req, res) => {
+  res.render("editCustomer", { customer: null, error: null });
+});
+
+// Handle search for customer
+app.post("/employee/edit-customer/search", isEmployee, async (req, res) => {
+  const { account_no, fullname } = req.body;   // ✅ match DB column names
+  try {
+    const result = await db.query(
+      "SELECT * FROM customers WHERE account_no=$1 AND fullname=$2",
+      [account_no, fullname]
+    );
+
+    if (result.rows.length === 0) {
+      return res.render("editCustomer", {
+        customer: null,
+        error: "Customer not found. Please check details again.",
+      });
+    }
+
+    res.render("editCustomer", { customer: result.rows[0], error: null });
+  } catch (err) {
+    console.error(err);
+    res.render("editCustomer", {
+      customer: null,
+      error: "Error fetching customer.",
+    });
+  }
+});
+
+// Handle update
+app.post("/employee/edit-customer/update/:id", isEmployee, async (req, res) => {
+  const { fullname, address, phone, email } = req.body; // ✅ correct column names
+  const { id } = req.params;
+
+  try {
+    await db.query(
+      `UPDATE customers
+       SET fullname=$1, address=$2, phone=$3, email=$4
+       WHERE customer_id=$5`,
+      [fullname, address, phone, email, id]
+    );
+    res.send("Customer details updated successfully!");
+  } catch (err) {
+    console.error(err);
+    res.send("Error updating customer.");
+  }
+});
+
+// Handle delete
+app.post("/employee/edit-customer/delete/:id", isEmployee, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.query("DELETE FROM customers WHERE customer_id=$1", [id]);
+    res.send("Customer deleted successfully!");
+  } catch (err) {
+    console.error(err);
+    res.send("Error deleting customer.");
+  }
+});
+
 
 
 // ---------------- LOGOUT ---------------- //
