@@ -448,6 +448,7 @@ app.post("/employee/edit-customer/delete/:id", isEmployee, async (req, res) => {
 
 
 
+
 // ---------------- LOGOUT ---------------- //
 app.get("/employee-logout", (req, res) => {
   req.session.destroy(err => {
