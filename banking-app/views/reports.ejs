@@ -1,74 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Reports</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports | Nova Bank</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { margin:0; font-family: Arial; background:#1e1e1e; color:#fff; }
-    .navbar { height:60px; background:#2a2a2a; display:flex; align-items:center; justify-content:space-between; padding:0 20px; border-bottom:1px solid #333; }
-    .navbar h2 { margin:0; }
-    .main { padding:20px; }
-    .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:20px; }
-    .card { background:#2a2a2a; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.6); text-align:center; }
-    .card h3 { margin:0 0 10px 0; color:#00adb5; }
-    .back-btn { display:inline-block; margin-top:20px; padding:10px 20px; background:#00adb5; color:#fff; text-decoration:none; border-radius:5px; }
-    .back-btn:hover { background:#019ca5; }
+    :root {
+      --primary: #3949ab; /* Indigo 600 */
+      --primary-light: #5c6bc0;
+      --primary-dark: #283593;
+      --bg: #f7f8fc;
+      --card-bg: #ffffff;
+      --text-dark: #1c1c1c;
+      --text-light: #555;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+    }
+
+    /* Navbar */
+    .navbar {
+      height: 64px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar-left img {
+      height: 36px;
+      width: auto;
+      border-radius: 6px;
+    }
+
+    .navbar-left h2 {
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 1.3rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: white;
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .back-btn:hover {
+      background: var(--primary-light);
+      color: #fff;
+    }
+
+    /* Main Layout */
+    .main {
+      padding: 32px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow);
+      text-align: center;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(57, 73, 171, 0.15);
+    }
+
+    .card h3 {
+      margin: 0 0 12px 0;
+      color: var(--primary-dark);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .navbar h2 {
+        font-size: 1.1rem;
+      }
+      .back-btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+      .navbar-left img {
+        height: 28px;
+      }
+    }
   </style>
 </head>
 <body>
 
-<div class="navbar">
-  <h2>Reports</h2>
-  <a href="/manager" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
-</div>
-
-<div class="main">
-  <div class="cards">
-    <div class="card"><h3>Total Employees</h3><p id="totalEmployees">0</p></div>
-    <div class="card"><h3>Total Salary</h3><p id="totalSalary">0</p></div>
-    <div class="card"><h3>Managers</h3><p id="totalManagers">0</p></div>
-    <div class="card"><h3>Cashiers</h3><p id="totalCashiers">0</p></div>
-    <div class="card"><h3>Accountants</h3><p id="totalAccountants">0</p></div>
-    <div class="card"><h3>Clerks</h3><p id="totalClerks">0</p></div>
-    <div class="card"><h3>IT Support</h3><p id="totalIT">0</p></div>
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src="/path/to/your-logo.png" alt="Nova Bank Logo">
+      <h2>Report</h2>
+    </div>
+    <a href="/manager" class="back-btn">
+      <i class="fa fa-arrow-left"></i> Back to Dashboard
+    </a>
   </div>
-</div>
 
-<script>
-  // Values passed from server
-  const data = {
-    totalEmployees: <%= totalEmployees %>,
-    totalSalary: <%= totalSalary %>,
-    totalManagers: <%= managers %>,
-    totalCashiers: <%= cashiers %>,
-    totalAccountants: <%= accountants %>,
-    totalClerks: <%= clerks %>,
-    totalIT: <%= itSupport %>
-  };
+  <div class="main">
+    <div class="cards">
+      <div class="card"><h3>Total Employees</h3><p id="totalEmployees">0</p></div>
+      <div class="card"><h3>Total Salary</h3><p id="totalSalary">0</p></div>
+      <div class="card"><h3>Managers</h3><p id="totalManagers">0</p></div>
+      <div class="card"><h3>Cashiers</h3><p id="totalCashiers">0</p></div>
+      <div class="card"><h3>Accountants</h3><p id="totalAccountants">0</p></div>
+      <div class="card"><h3>Clerks</h3><p id="totalClerks">0</p></div>
+      <div class="card"><h3>IT Support</h3><p id="totalIT">0</p></div>
+    </div>
+  </div>
 
-  function animateCounter(id, value) {
-    const el = document.getElementById(id);
-    let current = 0;
-    const increment = value / 50; // 50 steps
-    const interval = setInterval(() => {
-      current += increment;
-      if (current >= value) {
-        el.innerText = id === "totalSalary" ? "₹" + value : value;
-        clearInterval(interval);
-      } else {
-        el.innerText = id === "totalSalary" ? "₹" + Math.floor(current) : Math.floor(current);
-      }
-    }, 20);
-  }
+  <script>
+    const data = {
+      totalEmployees: <%= totalEmployees %>,
+      totalSalary: <%= totalSalary %>,
+      totalManagers: <%= managers %>,
+      totalCashiers: <%= cashiers %>,
+      totalAccountants: <%= accountants %>,
+      totalClerks: <%= clerks %>,
+      totalIT: <%= itSupport %>
+    };
 
-  animateCounter("totalEmployees", data.totalEmployees);
-  animateCounter("totalSalary", data.totalSalary);
-  animateCounter("totalManagers", data.totalManagers);
-  animateCounter("totalCashiers", data.totalCashiers);
-  animateCounter("totalAccountants", data.totalAccountants);
-  animateCounter("totalClerks", data.totalClerks);
-  animateCounter("totalIT", data.totalIT);
-</script>
+    function animateCounter(id, value) {
+      const el = document.getElementById(id);
+      let current = 0;
+      const increment = value / 50;
+      const interval = setInterval(() => {
+        current += increment;
+        if (current >= value) {
+          el.innerText = id === "totalSalary" ? "₹" + value : value;
+          clearInterval(interval);
+        } else {
+          el.innerText = id === "totalSalary"
+            ? "₹" + Math.floor(current)
+            : Math.floor(current);
+        }
+      }, 20);
+    }
+
+    animateCounter("totalEmployees", data.totalEmployees);
+    animateCounter("totalSalary", data.totalSalary);
+    animateCounter("totalManagers", data.totalManagers);
+    animateCounter("totalCashiers", data.totalCashiers);
+    animateCounter("totalAccountants", data.totalAccountants);
+    animateCounter("totalClerks", data.totalClerks);
+    animateCounter("totalIT", data.totalIT);
+  </script>
 
 </body>
 </html>

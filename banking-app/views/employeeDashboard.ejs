@@ -1,101 +1,525 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Employee Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      margin:0;
-      font-family: Arial, sans-serif;
-      background:#1e1e1e;
-      color:#fff;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
     .sidebar {
       position: fixed;
-      left:0; top:0;
-      width:220px; height:100%;
-      background:#2a2a2a;
-      display:flex;
-      flex-direction: column;
-      padding-top:20px;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(180deg, #1e293b 0%, #312e81 100%);
+      transition: all 0.3s ease;
+      z-index: 1000;
     }
+
+    .sidebar.collapsed {
+      width: 70px;
+    }
+
+    .sidebar.collapsed .sidebar-title,
+    .sidebar.collapsed nav a span {
+      display: none;
+    }
+
+    .sidebar.collapsed .sidebar-header {
+      justify-content: center;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sidebar-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: #6366f1;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .toggle-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .toggle-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .sidebar nav {
+      padding: 20px 10px;
+    }
+
     .sidebar a {
-      color:#fff;
-      padding:15px 20px;
-      text-decoration:none;
-      display:block;
-      transition:0.3s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      transition: all 0.3s ease;
     }
+
     .sidebar a:hover {
-      background:#00adb5;
-      color:#fff;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      transform: translateX(5px);
     }
+
+    .sidebar a.active {
+      background: #6366f1;
+      color: white;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      font-size: 18px;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 260px;
+      min-height: 100vh;
+      transition: all 0.3s ease;
+    }
+
+    .main-content.expanded {
+      margin-left: 70px;
+    }
+
+    /* Navbar */
     .navbar {
-      margin-left:220px;
-      height:60px;
-      background:#2a2a2a;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 20px;
-      border-bottom:1px solid #333;
+      background: white;
+      padding: 16px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .navbar h2 { margin:0; }
-    .main {
-      margin-left:220px;
-      padding:20px;
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .card {
-      background:#2a2a2a;
-      padding:20px;
-      border-radius:12px;
-      box-shadow:0px 2px 6px rgba(0, 0, 0, 0.4);
-      margin-bottom:20px;
+
+    .navbar-logo {
+      width: 45px;
+      height: 45px;
+      background: #6366f1;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
     }
-    .card h3 {
-      margin:0 0 10px 0;
-      color:#00adb5;
+
+    .navbar-brand h1 {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .info { font-size:16px; }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: #f3f4f6;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .profile-btn:hover {
+      background: #e5e7eb;
+    }
+
+    .profile-btn i {
+      color: #6366f1;
+      font-size: 20px;
+    }
+
+    /* Content Area */
+    .content {
+      padding: 30px;
+    }
+
+    .greeting {
+      font-size: 24px;
+      color: #1f2937;
+      margin-bottom: 30px;
+    }
+
+    .greeting span {
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Welcome Card */
+    .welcome-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      border-top: 4px solid #6366f1;
+      transition: all 0.3s ease;
+    }
+
+    .welcome-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(99,102,241,0.15);
+    }
+
+    .welcome-card h3 {
+      font-size: 28px;
+      color: #1f2937;
+      margin-bottom: 20px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      color: #4b5563;
+      font-size: 16px;
+    }
+
+    .info-row i {
+      color: #6366f1;
+      width: 24px;
+      font-size: 18px;
+    }
+
+    .info-row strong {
+      color: #1f2937;
+      min-width: 60px;
+    }
+
+    /* Quick Actions Grid */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .action-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border-top: 4px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .action-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .action-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(99,102,241,0.2);
+    }
+
+    .action-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .action-card h4 {
+      font-size: 16px;
+      color: #6b7280;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .action-card i {
+      font-size: 32px;
+    }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Color variants */
+    .action-card:nth-child(1) i { color: #6366f1; }
+    .action-card:nth-child(2) i { color: #10b981; }
+    .action-card:nth-child(3) i { color: #f59e0b; }
+    .action-card:nth-child(4) i { color: #8b5cf6; }
+    .action-card:nth-child(5) i { color: #3b82f6; }
+    .action-card:nth-child(6) i { color: #ef4444; }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 70px;
+      }
+      .sidebar-title,
+      .sidebar a span {
+        display: none;
+      }
+      .main-content {
+        margin-left: 70px;
+      }
+      .actions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
 
- <!-- Sidebar -->
-<div class="sidebar">
-  <a href="/employee-dashboard"><i class="fa fa-home"></i> Dashboard</a>
-  <a href="/employee/add-customer"><i class="fa fa-user-plus"></i> Add Customer</a>
-
-  <!-- Remove Edit link unless customer exists -->
-  <% if (typeof customer !== 'undefined' && customer) { %>
-    <a href="/employee/edit-customer/<%= customer.customer_id %>">Edit</a>
-  <% } %>
-
-  <a href="/employee/view-customer"><i class="fa fa-search"></i> View Customer</a>
-  <a href="/employee/edit-customer"> <i class="fa fa-user-edit"></i> Edit Customer</a>
-  <a href="/employee/transactions"><i class="fa fa-exchange-alt"></i> Transactions</a>
-  <a href="/employee/daily-report"><i class="fa fa-calendar-day"></i> Daily Report</a>
-  <a href="/employee/statement/12345"><i class="fa fa-file-alt"></i> Statement</a>
-  <a href="/employee/reports"><i class="fa fa-chart-line"></i> Reports</a>
-  <a href="/employee-logout"><i class="fa fa-sign-out-alt"></i> Logout</a>
-</div>
-
-  <!-- Navbar -->
-  <div class="navbar">
-    <h2>Employee Dashboard</h2>
-    <div class="profile"><i class="fa fa-user-circle"></i><span> <%= employee.name %> </span></div>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-header-left">
+        <div class="sidebar-logo">
+          <i class="fa fa-building"></i>
+        </div>
+        <div class="sidebar-title">NOVA BANK</div>
+      </div>
+      <button class="toggle-btn" id="toggleBtn">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+    <nav>
+      <a href="/employee-dashboard" class="active">
+        <i class="fa fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="/employee/add-customer">
+        <i class="fa fa-user-plus"></i>
+        <span>Add Customer</span>
+      </a>
+      <a href="/employee/view-customer">
+        <i class="fa fa-search"></i>
+        <span>View Customer</span>
+      </a>
+      <a href="/employee/edit-customer">
+        <i class="fa fa-user-edit"></i>
+        <span>Edit Customer</span>
+      </a>
+      <a href="/employee/transactions">
+        <i class="fa fa-exchange-alt"></i>
+        <span>Transactions</span>
+      </a>
+      <a href="/employee/daily-report">
+        <i class="fa fa-calendar-day"></i>
+        <span>Daily Report</span>
+      </a>
+      <a href="/employee/statement/12345">
+        <i class="fa fa-file-alt"></i>
+        <span>Statement</span>
+      </a>
+      <a href="/employee/reports">
+        <i class="fa fa-chart-line"></i>
+        <span>Reports</span>
+      </a>
+      <a href="/employee-logout">
+        <i class="fa fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </nav>
   </div>
 
-  <!-- Main -->
-  <div class="main">
-    <div class="card">
-      <h3>Welcome, <%= employee.name %>!</h3>
-      <div class="info">
-        <p><strong>Email:</strong> <%= employee.email %></p>
-        <p><strong>Role:</strong> <%= employee.role %></p>
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <!-- Navbar -->
+    <div class="navbar">
+      <div class="navbar-brand">
+        <div class="navbar-logo">
+          <i class="fa fa-building"></i>
+        </div>
+        <h1>NOVA BANK</h1>
+      </div>
+      <div class="navbar-right">
+        <button class="profile-btn">
+          <i class="fa fa-user-circle"></i>
+          <span><%= employee.name %></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="greeting">
+        Good Morning, <span><%= employee.name %></span>!
+      </div>
+
+      <!-- Welcome Card -->
+      <div class="welcome-card">
+        <h3>Welcome, <%= employee.name %>!</h3>
+        <div class="info-row">
+          <i class="fa fa-envelope"></i>
+          <strong>Email:</strong>
+          <span><%= employee.email %></span>
+        </div>
+        <div class="info-row">
+          <i class="fa fa-user-tag"></i>
+          <strong>Role:</strong>
+          <span><%= employee.role %></span>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="actions-grid">
+        <div class="action-card">
+          <div class="action-card-header">
+            <h4>Total Accounts</h4>
+            <i class="fa fa-users"></i>
+          </div>
+          <p class="stat-number">1,523</p>
+          <p class="stat-label">Active customer accounts</p>
+        </div>
+
+        
+
+        <div class="action-card">
+          <div class="action-card-header">
+            <h4>Today's Transactions</h4>
+            <i class="fa fa-exchange-alt"></i>
+          </div>
+          <p class="stat-number">284</p>
+          <p class="stat-label">Processed transactions today</p>
+        </div>
+
+        <div class="action-card">
+          <div class="action-card-header">
+            <h4>Flagged Transactions</h4>
+            <i class="fa fa-flag"></i>
+          </div>
+          <p class="stat-number">3</p>
+          <p class="stat-label">Require immediate attention</p>
+        </div>
+
+        <div class="action-card">
+          <div class="action-card-header">
+            <h4>Loan Applications</h4>
+            <i class="fa fa-file-invoice-dollar"></i>
+          </div>
+          <p class="stat-number">12</p>
+          <p class="stat-label">Pending review</p>
+        </div>
+
+        <div class="action-card">
+          <div class="action-card-header">
+            <h4>Total Deposits</h4>
+            <i class="fa fa-arrow-down"></i>
+          </div>
+          <p class="stat-number">₹2.4M</p>
+          <p class="stat-label">Total deposits today</p>
+        </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Sidebar toggle functionality
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+      mainContent.classList.toggle('expanded');
+    });
+  </script>
 
 </body>
 </html>

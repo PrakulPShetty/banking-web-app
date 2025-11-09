@@ -2,42 +2,182 @@
 <html>
 <head>
   <title>Edit Customer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: Arial, sans-serif; background:#1e1e1e; color:#fff; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
     .container {
-      width: 650px;
-      margin: 40px auto;
-      padding: 30px;
-      background:#2a2a2a;
-      border-radius: 12px;
-      box-shadow:0 4px 15px rgba(0,0,0,0.5);
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 45px 50px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     }
-    h2 { text-align:center; margin-bottom:20px; color:#00adb5; }
-    label { display:block; margin:10px 0 5px; }
-    input, button {
-      width:100%;
-      padding:12px;
-      margin-bottom:15px;
-      border:none;
-      border-radius:6px;
-      font-size:15px;
+
+    h2 {
+      text-align: center;
+      margin-bottom: 35px;
+      color: #4f46e5;
+      font-size: 32px;
+      font-weight: 600;
     }
-    input { background:#333; color:#fff; }
-    button { background:#00adb5; color:#fff; cursor:pointer; font-weight:bold; transition:0.3s; }
-    button:hover { background:#00929b; }
-    .btn-update { background:green; }
-    .btn-update:hover { background:#0f7a0f; }
-    .btn-delete { background:red; }
-    .btn-delete:hover { background:#b30000; }
-    .error { color:red; margin-bottom:10px; text-align:center; }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 500;
+      border-left: 4px solid #dc2626;
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 15px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #1f2937;
+      background: #f9fafb;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #6366f1;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    button[type="submit"]:not(.btn-update):not(.btn-delete) {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    button[type="submit"]:not(.btn-update):not(.btn-delete):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    }
+
+    .btn-update {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      margin-top: 10px;
+    }
+
+    .btn-update:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-delete:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
     .back-link {
-      display:block; 
-      text-align:center; 
-      margin-top:15px; 
-      color:#00adb5; 
-      text-decoration:none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 25px;
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      padding: 10px 20px;
+      border-radius: 8px;
+      justify-content: center;
+      width: 100%;
     }
-    .back-link:hover { text-decoration:underline; }
+
+    .back-link:hover {
+      color: #4f46e5;
+      background: #eef2ff;
+      gap: 12px;
+    }
+
+    .back-link i {
+      font-size: 14px;
+    }
+
+    form {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 35px 25px;
+      }
+
+      h2 {
+        font-size: 26px;
+      }
+
+      label {
+        font-size: 13px;
+      }
+
+      input {
+        font-size: 14px;
+      }
+
+      button {
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -57,7 +197,7 @@
         <label>Full Name:</label>
         <input type="text" name="fullname" required />
 
-        <button type="submit">Search Customer</button>
+        <button type="submit"><i class="fa fa-search"></i> Search Customer</button>
       </form>
     <% } %>
 
@@ -76,15 +216,17 @@
         <label>Email:</label>
         <input type="email" name="email" value="<%= customer.email %>" required />
 
-        <button class="btn-update" type="submit">Update Customer</button>
+        <button class="btn-update" type="submit"><i class="fa fa-check"></i> Update Customer</button>
       </form>
 
       <form action="/employee/edit-customer/delete/<%= customer.customer_id %>" method="POST">
-        <button class="btn-delete" type="submit">Delete Account</button>
+        <button class="btn-delete" type="submit"><i class="fa fa-trash"></i> Delete Account</button>
       </form>
     <% } %>
 
-    <a href="/employee-dashboard" class="back-link">⬅ Back to Dashboard</a>
+    <a href="/employee-dashboard" class="back-link">
+      <i class="fa fa-arrow-left"></i> Back to Dashboard
+    </a>
   </div>
 </body>
 </html>

@@ -1,96 +1,288 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer Statement</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #1e1e1e;
-      color: #fff;
-      padding: 20px;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
     }
 
     .container {
-      max-width: 800px;
-      margin: auto;
-      background: #2a2a2a;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 25px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      background: #6366f1;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     h2 {
-      color: #00adb5;
-      margin-bottom: 20px;
-      text-align: center;
+      color: #1f2937;
+      margin-bottom: 10px;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .account-info {
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .account-number {
+      color: #6366f1;
+      font-weight: 600;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      background: #ffffff;
     }
 
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #444;
+    thead {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
     }
 
     th {
-      background: #00adb5;
-      color: #fff;
-      border-radius: 6px;
+      padding: 16px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    tr:hover {
-      background: #333;
+    th:first-child {
+      border-top-left-radius: 12px;
+    }
+
+    th:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      color: #374151;
+      font-size: 15px;
+    }
+
+    tbody tr {
+      transition: all 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 12px;
+    }
+
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 12px;
+    }
+
+    .type-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .type-deposit {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .type-withdrawal {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .type-transfer {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .amount-positive {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .amount-negative {
+      color: #dc2626;
+      font-weight: 600;
     }
 
     .back-link {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #00adb5;
-      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: white;
       text-decoration: none;
-      border-radius: 8px;
-      transition: 0.3s;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     .back-link:hover {
-      background: #019ca5;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .back-link i {
+      font-size: 14px;
+    }
+
+    .no-transactions {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 25px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      table {
+        font-size: 13px;
+      }
+
+      th, td {
+        padding: 12px 8px;
+      }
+
+      .back-link {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Statement for Account: <%= account_no %></h2>
+    <div class="header">
+      <div class="logo-section">
 
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Balance</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% transactions.forEach(tx => { %>
+        <span class="logo-text">NOVA BANK</span>
+      </div>
+      <h2>Account Statement</h2>
+      <p class="account-info">Account Number: <span class="account-number"><%= account_no %></span></p>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
           <tr>
-            <td><%= tx.date %></td>
-            <td><%= tx.type %></td>
-            <td>₹<%= tx.amount %></td>
-            <td>₹<%= tx.balance %></td>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Balance</th>
           </tr>
-        <% }) %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% if (transactions && transactions.length > 0) { %>
+            <% transactions.forEach(tx => { %>
+              <tr>
+                <td><%= tx.date %></td>
+                <td>
+                  <span class="type-badge type-<%= tx.type.toLowerCase() %>">
+                    <%= tx.type %>
+                  </span>
+                </td>
+                <td class="<%= tx.type.toLowerCase() === 'deposit' ? 'amount-positive' : 'amount-negative' %>">
+                  ₹<%= tx.amount %>
+                </td>
+                <td>₹<%= tx.balance %></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="4" class="no-transactions">
+                <i class="fa fa-inbox" style="font-size: 48px; color: #d1d5db; margin-bottom: 10px;"></i>
+                <p>No transactions found</p>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
 
-    <a href="/employee-dashboard" class="back-link"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
+    <a href="/employee-dashboard" class="back-link">
+      <i class="fa fa-arrow-left"></i> Back to Dashboard
+    </a>
   </div>
 </body>
 </html>

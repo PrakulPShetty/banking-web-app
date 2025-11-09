@@ -5,34 +5,95 @@
   <title>Bank Portal</title>
   <style>
     body { 
-      background: #1e1e1e; 
-      color: #fff; 
-      font-family: Arial, sans-serif; 
+      background: #f5f3ff; /* soft lavender-white */
+      color: #1e1b4b; /* deep indigo text */
+      font-family: 'Poppins', Arial, sans-serif; 
       display: flex; 
       flex-direction: column; 
       justify-content: center; 
       align-items: center; 
       height: 100vh; 
+      margin: 0;
     }
+
+    /* Navbar styles */
+    nav {
+      width: 100%;
+      background: #1e1b4b; /* deep indigo */
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 0 4px 10px rgba(30, 27, 75, 0.4);
+      z-index: 100;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: #a78bfa; /* pastel purple */
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+    }
+
+    .bank-name {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
     a { 
       margin: 20px; 
       padding: 15px 30px; 
-      background: #00adb5; 
+      background: #7c3aed; /* rich indigo-violet */
       color: #fff; 
       text-decoration: none; 
-      border-radius: 5px; 
+      border-radius: 10px; 
       font-size: 18px;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
     }
+
     a:hover {
-      background: #009ca8;
+      transform: translateY(-3px);
+      background: #a78bfa; /* pastel purple hover */
+      box-shadow: 0 6px 18px rgba(167, 139, 250, 0.4);
     }
+
     h1 {
+      margin-top: 120px; /* to offset fixed navbar */
       margin-bottom: 40px;
+      font-size: 32px;
+      font-weight: 600;
+      color: #312e81; /* deep blue-purple */
+      text-shadow: 0 1px 3px rgba(49, 46, 129, 0.2);
     }
   </style>
 </head>
 <body>
+  <nav>
+    <div class="logo-container">
+      <div class="logo">N</div>
+      <div class="bank-name">NOVA BANK</div>
+    </div>
+  </nav>
+
   <h1>Welcome to Bank Portal</h1>
   <div>
     <a href="/employee-login">Employee Login</a>
