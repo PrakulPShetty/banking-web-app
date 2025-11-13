@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Employee - Nova Bank</title>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+  :root {
+    --primary: #4B0082;
+    --primary-dark: #2E005F;
+    --bg: #f5f3ff;
+    --card-bg: #ffffff;
+    --text-dark: #222;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg);
+    color: var(--text-dark);
+  }
+
+  /* NAVBAR */
+  .navbar {
+    background: var(--primary);
+    color: white;
+    padding: 12px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 1000;
+  }
+
+  .navbar .logo {
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: linear-gradient(var(--primary-dark), var(--primary));
+    width: 230px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 80px;
+    color: white;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    padding: 15px 20px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .sidebar ul li:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    margin-left: 230px;
+    padding: 100px 30px 30px 30px;
+  }
+
+  h1 {
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+  }
+
+  /* FORM CARD */
+  .form-card {
+    background: var(--card-bg);
+    padding: 40px;                     /* ✔ MORE PADDING */
+    border-radius: 12px;
+    width: 950px;                      /* ✔ WIDER FORM */
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid #ddd;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px 40px;                    /* ✔ BIGGER COLUMN + ROW SPACING */
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 8px;                /* ✔ SPACING BELOW LABEL */
+    display: block;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 14px;                     /* ✔ LARGER INPUT SIZE */
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    margin-bottom: 10px;               /* ✔ SPACE BELOW INPUT */
+  }
+
+  button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 30px;                  /* ✔ MORE SPACE ABOVE BUTTON */
+    width: 220px;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: var(--primary-dark);
+  }
+
+</style>
+
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo" onclick="location.href='/manager'">
+      <i class="fa fa-building-columns"></i> NOVA BANK
+    </div>
+
+    <div><i class="fa fa-user-circle"></i> <%= managerName %></div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <ul>
+      <li onclick="location.href='/manager'"><i class="fa fa-home"></i> Dashboard</li>
+      <li onclick="location.href='/add-employee-form'"><i class="fa fa-user-plus"></i> Add Employee</li>
+      <li onclick="location.href='/employees'"><i class="fa fa-users"></i> View Employees</li>
+      <li onclick="location.href='/reports'"><i class="fa fa-chart-line"></i> Reports</li>
+      <li onclick="location.href='/logout'"><i class="fa fa-sign-out-alt"></i> Logout</li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <h1>Add New Employee</h1>
+
+    <div class="form-card">
+      <form action="/add-employee" method="POST">
+
+        <div class="two-col">
+          <div>
+            <label>Full Name</label>
+            <input type="text" name="name" required>
+          </div>
+
+          <div>
+            <label>Username</label>
+            <input type="text" name="username" required>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label>Email</label>
+            <input type="email" name="email" required>
+          </div>
+
+          <div>
+            <label>Role</label>
+            <select name="role" required>
+              <option value="">Select Role</option>
+              <option value="Manager">Manager</option>
+              <option value="Cashier">Cashier</option>
+              <option value="Accountant">Accountant</option>
+              <option value="Clerk">Clerk</option>
+              <option value="IT Support">IT Support</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label>Salary (₹)</label>
+            <input type="number" name="salary" required>
+          </div>
+
+          <div>
+            <label>Password</label>
+            <input type="password" name="password" required>
+          </div>
+        </div>
+
+        <button type="submit">Add Employee</button>
+
+      </form>
+    </div>
+
+  </main>
+
+</body>
+</html>

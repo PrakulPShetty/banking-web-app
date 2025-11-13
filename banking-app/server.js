@@ -103,14 +103,49 @@ app.get("/logout", (req, res) => {
 app.get("/manager", isAuthenticated, async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM employees_credentials");
+
+    const totalEmployees = result.rows.length;
+    const totalSalary = result.rows.reduce((sum, e) => sum + Number(e.salary), 0);
+
+    const totalManagers = result.rows.filter(e => e.role === "Manager").length;
+    const totalCashiers = result.rows.filter(e => e.role === "Cashier").length;
+    const totalAccountants = result.rows.filter(e => e.role === "Accountant").length;
+    const totalClerks = result.rows.filter(e => e.role === "Clerk").length;
+    const totalITSupport = result.rows.filter(e => e.role === "IT Support").length;
+
     res.render("manager", { 
       employees: result.rows,
-      managerName: req.session.managerName
+      managerName: req.session.managerName,
+
+      // IMPORTANT: Add these for EJS
+      totalEmployees,
+      totalSalary,
+      totalManagers,
+      totalCashiers,
+      totalAccountants,
+      totalClerks,
+      totalITSupport
     });
+
   } catch (err) {
     console.error(err);
-    res.render("manager", { employees: [], managerName: req.session.managerName });
+    res.render("manager", { 
+      employees: [],
+      managerName: req.session.managerName,
+      totalEmployees: 0,
+      totalSalary: 0,
+      totalManagers: 0,
+      totalCashiers: 0,
+      totalAccountants: 0,
+      totalClerks: 0,
+      totalITSupport: 0
+    });
   }
+});
+
+// Show Add Employee Form
+app.get("/add-employee-form", isAuthenticated, (req, res) => {
+  res.render("addEmployeeForm", { managerName: req.session.managerName });
 });
 
 // Add Employee
