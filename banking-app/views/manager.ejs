@@ -34,7 +34,7 @@
       top: 0;
       width: 100%;
       height: 60px;
-      z-index: 999;
+      z-index: 1000;
     }
 
     .navbar .logo {
@@ -56,28 +56,18 @@
       left: 0;
       padding-top: 80px;
       color: white;
-      box-shadow: 3px 0 10px rgba(0,0,0,0.1);
-      z-index: 998;
     }
 
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
+    .sidebar ul { list-style: none; padding: 0; }
     .sidebar ul li {
       padding: 15px 20px;
-      font-size: 15px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 12px;
-      cursor: pointer;
       transition: 0.2s;
     }
-
-    .sidebar ul li:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+    .sidebar ul li:hover { background: rgba(255,255,255,0.2); }
 
     /* MAIN CONTENT */
     .main-content {
@@ -85,12 +75,9 @@
       padding: 100px 30px;
     }
 
-    h1 {
-      color: var(--primary-dark);
-      margin-bottom: 20px;
-    }
+    h1 { color: var(--primary-dark); margin-bottom: 20px; }
 
-    /* DASHBOARD CARDS */
+    /* CARDS */
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -107,17 +94,6 @@
       box-shadow: 0 3px 8px rgba(0,0,0,0.08);
     }
 
-    .card h3 {
-      margin: 0 0 10px;
-      color: var(--primary);
-    }
-
-    .card p {
-      margin: 0;
-      font-size: 22px;
-      font-weight: bold;
-    }
-
     /* TABLE */
     table {
       width: 100%;
@@ -126,14 +102,12 @@
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-      margin-top: 20px;
     }
 
     th {
       background: var(--primary);
       color: white;
       padding: 12px;
-      text-align: left;
     }
 
     td {
@@ -141,40 +115,20 @@
       border-bottom: 1px solid #eee;
     }
 
-    tr:hover {
-      background: #f3eaff;
-    }
-
-    /* DELETE BUTTON */
-    .btn-delete {
-      background: #d9534f;
-      padding: 6px 10px;
-      color: white;
+    .delete-btn {
+      padding: 8px 16px;
+      background: #dc2626;
       border: none;
       border-radius: 6px;
+      color: #fff;
       cursor: pointer;
+      transition: .2s;
     }
 
-    .btn-delete:hover {
-      background: #b52b27;
-    }
-
-    .btn-edit {
-      background: #6a5acd;
-      padding: 6px 10px;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .btn-edit:hover {
-      background: #4c3cbf;
-    }
+    .delete-btn:hover { background: #b91c1c; }
   </style>
 
 </head>
-
 <body>
 
   <!-- NAVBAR -->
@@ -182,11 +136,7 @@
     <div class="logo" onclick="location.href='/manager'">
       <i class="fa fa-building-columns"></i> NOVA BANK
     </div>
-
-    <!-- FIXED: Manager Name now visible -->
-    <div>
-      <i class="fa fa-user-circle"></i> <%= managerName %>
-    </div>
+    <div><i class="fa fa-user-circle"></i> <%= managerName %></div>
   </div>
 
   <!-- SIDEBAR -->
@@ -200,10 +150,12 @@
     </ul>
   </aside>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <main class="main-content">
+
     <h1>Manager Dashboard</h1>
 
+    <!-- CARDS -->
     <div class="cards">
       <div class="card"><h3>Total Employees</h3><p><%= totalEmployees %></p></div>
       <div class="card"><h3>Total Salary</h3><p>₹<%= totalSalary %></p></div>
@@ -214,8 +166,7 @@
       <div class="card"><h3>IT Support</h3><p><%= totalITSupport %></p></div>
     </div>
 
-    <h2>Employee List</h2>
-
+    <!-- TABLE -->
     <table>
       <tr>
         <th>ID</th>
@@ -224,32 +175,38 @@
         <th>Email</th>
         <th>Role</th>
         <th>Salary</th>
-        <th>Actions</th>
+        <th>Action</th>
       </tr>
 
       <% employees.forEach(emp => { %>
-      <tr>
-        <td><%= emp.id %></td>
-        <td><%= emp.name %></td>
-        <td><%= emp.username %></td>
-        <td><%= emp.email %></td>
-        <td><%= emp.role %></td>
-        <td>₹<%= emp.salary %></td>
+        <tr id="row-<%= emp.id %>">
+          <td><%= emp.id %></td>
+          <td><%= emp.name %></td>
+          <td><%= emp.username %></td>
+          <td><%= emp.email %></td>
+          <td><%= emp.role %></td>
+          <td>₹<%= emp.salary %></td>
 
-        <td>
-          <form action="/delete-employee/<%= emp.id %>" method="POST" style="display:inline;">
-            <button class="btn-delete" onclick="return confirm('Delete this employee?')">
+          <td>
+            <button class="delete-btn" onclick="deleteEmp(<%= emp.id %>)">
               Delete
             </button>
-          </form>
-        </td>
-
-      </tr>
+          </td>
+        </tr>
       <% }) %>
-
     </table>
 
   </main>
+
+  <script>
+    function deleteEmp(id) {
+      fetch(`/delete-employee/${id}`, { method: "POST" })
+        .then(() => {
+          document.getElementById(`row-${id}`).remove();
+        })
+        .catch(() => alert("Error deleting employee"));
+    }
+  </script>
 
 </body>
 </html>
