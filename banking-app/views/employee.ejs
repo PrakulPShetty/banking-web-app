@@ -1,61 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Employee List</title>
+  <meta charset="UTF-8">
+  <title>Employee List - NOVA BANK</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --primary: #4B0082;
+      --primary-dark: #2E005F;
+      --bg: #f5f3ff;
+      --card-bg: #ffffff;
+      --border: #dddddd;
+      --text-dark: #222;
     }
 
     body {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-      min-height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 40px 20px;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-dark);
     }
 
-    h1 {
-      color: #ffffff;
-      text-align: center;
-      font-size: 36px;
+    /* NAVBAR */
+    .navbar {
+      background: var(--primary);
+      color: white;
+      padding: 12px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 60px;
+      z-index: 1000;
+      box-sizing: border-box;
+    }
+
+    .navbar .logo {
+      font-size: 22px;
       font-weight: 600;
-      margin-bottom: 40px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .table-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    /* SIDEBAR */
+    .sidebar {
+      background: linear-gradient(var(--primary-dark), var(--primary));
+      width: 230px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding-top: 80px;
+      color: white;
+    }
+
+    .sidebar ul { 
+      list-style: none; 
+      padding: 0; 
+    }
+
+    .sidebar ul li {
+      padding: 15px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.2s;
+    }
+
+    .sidebar ul li:hover { 
+      background: rgba(255,255,255,0.2); 
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      margin-left: 230px;
+      padding: 100px 30px;
+    }
+
+    h1 { 
+      color: var(--primary-dark); 
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    /* TABLE CONTAINER */
+    .table-wrapper {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
       overflow: hidden;
+      border: 1px solid var(--border);
     }
 
+    /* TABLE */
     table {
       width: 100%;
       border-collapse: collapse;
+      background: white;
     }
 
     th {
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-      color: #ffffff;
-      padding: 18px 20px;
+      background: var(--primary);
+      color: white;
+      padding: 14px 16px;
       text-align: left;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     td {
-      padding: 16px 20px;
-      border-bottom: 1px solid #e5e7eb;
-      color: #374151;
-      font-size: 15px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #eee;
+      color: var(--text-dark);
     }
 
     tr:last-child td {
@@ -64,60 +130,64 @@
 
     tr:hover {
       background: #f9fafb;
-      transition: background 0.2s ease;
     }
 
-    button {
+    .delete-btn {
       padding: 8px 16px;
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: #dc2626;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+      transition: .2s;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .delete-btn:hover { 
+      background: #b91c1c; 
+      transform: translateY(-2px);
+    }
+
+    /* ACTION BUTTONS */
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 28px;
       border: none;
       border-radius: 8px;
-      color: #ffffff;
       cursor: pointer;
+      font-size: 15px;
       font-weight: 600;
-      font-size: 14px;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    .add-link {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      margin: 30px auto 0;
-      padding: 14px 32px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #ffffff;
+      gap: 8px;
       text-decoration: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-      text-align: center;
-      justify-content: center;
     }
 
-    .add-link:hover {
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-      background: linear-gradient(135deg, #059669 0%, #047857 100%);
     }
 
-    .link-container {
-      text-align: center;
-      max-width: 1200px;
-      margin: 0 auto;
+    .btn-secondary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
     }
 
     form {
@@ -125,63 +195,106 @@
     }
 
     @media (max-width: 768px) {
-      h1 {
-        font-size: 28px;
-        margin-bottom: 30px;
+      .main-content {
+        margin-left: 0;
+        padding: 100px 20px;
+      }
+
+      .sidebar {
+        display: none;
       }
 
       th, td {
-        padding: 12px 10px;
+        padding: 10px 8px;
         font-size: 13px;
       }
 
-      button {
-        padding: 6px 12px;
-        font-size: 13px;
-      }
-
-      .add-link {
-        font-size: 14px;
-        padding: 12px 24px;
-      }
-
-      .table-container {
+      .table-wrapper {
         overflow-x: auto;
       }
 
       table {
         min-width: 600px;
       }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
+
 </head>
 <body>
-  <h1>Employee List</h1>
-  <div class="table-container">
-    <table>
-      <tr>
-        <th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Salary</th><th>Action</th>
-      </tr>
-      <% employees.forEach(emp => { %>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo" onclick="location.href='/manager'">
+      <i class="fa fa-building-columns"></i> NOVA BANK
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <ul>
+      <li onclick="location.href='/manager'"><i class="fa fa-home"></i> Dashboard</li>
+      <li onclick="location.href='/add-employee-form'"><i class="fa fa-user-plus"></i> Add Employee</li>
+      <li onclick="location.href='/employees'"><i class="fa fa-users"></i> View Employees</li>
+      <li onclick="location.href='/reports'"><i class="fa fa-chart-line"></i> Reports</li>
+      <li onclick="location.href='/logout'"><i class="fa fa-sign-out-alt"></i> Logout</li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <h1>Employee List</h1>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+      <table>
         <tr>
-          <td><%= emp.id %></td>
-          <td><%= emp.name %></td>
-          <td><%= emp.email %></td>
-          <td><%= emp.role %></td>
-          <td>₹<%= emp.salary %></td>
-          <td>
-            <form action="/delete-employee/<%= emp.id %>" method="POST" style="display:inline;">
-              <button type="submit"><i class="fa fa-trash"></i> Delete</button>
-            </form>
-          </td>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Salary</th>
+          <th>Action</th>
         </tr>
-      <% }) %>
-    </table>
-  </div>
-  <div class="link-container">
-    <a href="/manager" class="add-link">
-      <i class="fa fa-plus"></i> Add Another Employee
-    </a>
-  </div>
+        <% employees.forEach(emp => { %>
+          <tr>
+            <td><%= emp.id %></td>
+            <td><%= emp.name %></td>
+            <td><%= emp.email %></td>
+            <td><%= emp.role %></td>
+            <td>₹<%= emp.salary %></td>
+            <td>
+              <form action="/delete-employee/<%= emp.id %>" method="POST" style="display:inline;">
+                <button class="delete-btn" type="submit">
+                  <i class="fa fa-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-buttons">
+      <a href="/add-employee-form" class="btn btn-primary">
+        <i class="fa fa-user-plus"></i> Add New Employee
+      </a>
+      <a href="/manager" class="btn btn-secondary">
+        <i class="fa fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+
+  </main>
+
 </body>
 </html>

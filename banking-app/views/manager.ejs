@@ -22,7 +22,7 @@
       color: var(--text-dark);
     }
 
-    /* NAVBAR */
+    /* NAVBAR - UPDATED */
     .navbar {
       background: var(--primary);
       color: white;
@@ -32,9 +32,12 @@
       align-items: center;
       position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       width: 100%;
       height: 60px;
       z-index: 1000;
+      box-sizing: border-box;
     }
 
     .navbar .logo {
@@ -44,6 +47,24 @@
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    /* Profile section - NEW */
+    .navbar > div:last-child {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    .navbar > div:last-child:hover {
+      background: rgba(255, 255, 255, 0.25);
     }
 
     /* SIDEBAR */

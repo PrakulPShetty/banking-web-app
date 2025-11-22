@@ -85,49 +85,105 @@
 
         h1 {
             color: var(--primary-dark);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 28px;
         }
 
         .form-card {
             background: var(--card-bg);
-            padding: 30px;
+            padding: 50px;
             border-radius: 12px;
-            max-width: 550px;
+            max-width: 1000px; /* reduced from 1200px to 1000px */
+            width: 90%;
+            margin: 0 auto;
             border: 1px solid var(--border);
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
+        /* 2-column layout with better spacing */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px 40px; /* increased gap between columns for wider form */
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+        }
+
         label {
-            display: block;
-            margin: 12px 0 5px;
+            margin-bottom: 10px;
             font-weight: 500;
+            color: var(--text-dark);
+            font-size: 14px;
         }
 
         input, select {
             width: 100%;
-            padding: 12px;
+            padding: 16px;
             border: 1px solid var(--border);
             border-radius: 8px;
             font-size: 15px;
-            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(75, 0, 130, 0.1);
         }
 
         button {
             background: var(--primary);
             color: white;
-            width: 100%;
-            padding: 12px;
+            width: 220px;
+            padding: 14px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
             transition: 0.2s;
-            margin-top: 15px;
+            margin-top: 35px;
         }
 
         button:hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(75, 0, 130, 0.3);
+        }
+
+        .btn-wrapper {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 100px 20px;
+                margin-left: 0;
+            }
+            .sidebar {
+                display: none;
+            }
+            .form-card {
+                max-width: 100%;
+                padding: 30px 20px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .btn-wrapper {
+                justify-content: center;
+            }
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -139,7 +195,7 @@
         <div class="logo" onclick="location.href='/manager'">
             <i class="fa fa-building-columns"></i> NOVA BANK
         </div>
-        <div><i class="fa fa-user-circle"></i> <%= managerName %></div>
+        <div><i class="fa fa-user-circle"></i> Manager Name</div>
     </div>
 
     <!-- SIDEBAR -->
@@ -158,36 +214,54 @@
         <h1>Add New Employee</h1>
 
         <div class="form-card">
-
             <form action="/add-employee" method="POST">
+                <div class="form-grid">
+                    <!-- Row 1: Full Name + Username -->
+                    <div class="form-field">
+                        <label>Full Name</label>
+                        <input type="text" name="name" placeholder="Enter full name" required>
+                    </div>
 
-                <label>Full Name</label>
-                <input type="text" name="name" required>
+                    <div class="form-field">
+                        <label>Username</label>
+                        <input type="text" name="username" placeholder="Enter username" required>
+                    </div>
 
-                <label>Username</label>
-                <input type="text" name="username" required>
+                    <!-- Row 2: Email + Role -->
+                    <div class="form-field">
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="Enter email address" required>
+                    </div>
 
-                <label>Email</label>
-                <input type="email" name="email" required>
+                    <div class="form-field">
+                        <label>Role</label>
+                        <select name="role" required>
+                            <option value="">-- Select Role --</option>
+                            <option>Manager</option>
+                            <option>Cashier</option>
+                            <option>Accountant</option>
+                            <option>Clerk</option>
+                            <option>IT Support</option>
+                        </select>
+                    </div>
 
-                <label>Role</label>
-                <select name="role" required>
-                    <option value="">-- Select Role --</option>
-                    <option>Manager</option>
-                    <option>Cashier</option>
-                    <option>Accountant</option>
-                    <option>Clerk</option>
-                    <option>IT Support</option>
-                </select>
+                    <!-- Row 3: Salary + Password -->
+                    <div class="form-field">
+                        <label>Salary (₹)</label>
+                        <input type="number" name="salary" placeholder="Enter salary amount" required>
+                    </div>
 
-                <label>Salary (₹)</label>
-                <input type="number" name="salary" required>
+                    <div class="form-field">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter password" required>
+                    </div>
+                </div>
 
-                <label>Password</label>
-                <input type="password" name="password" required>
-
-                <button type="submit">Add Employee</button>
-
+                <div class="btn-wrapper">
+                    <button type="submit">
+                        <i class="fa fa-user-plus"></i> Add Employee
+                    </button>
+                </div>
             </form>
         </div>
     </main>

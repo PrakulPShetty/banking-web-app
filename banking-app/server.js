@@ -149,10 +149,6 @@ app.get("/add-employee-form", isAuthenticated, (req, res) => {
 });
 
 // Add Employee
-app.get("/add-employee-form", isAuthenticated, (req, res) => {
-  res.render("addEmployeeForm", { managerName: req.session.managerName });
-});
-
 app.post("/add-employee", isAuthenticated, async (req, res) => {
   const { username, name, email, role, salary, password } = req.body;
   if (!username || !name || !email || !role || !salary || !password) return res.send("All fields are required");
@@ -169,8 +165,6 @@ app.post("/add-employee", isAuthenticated, async (req, res) => {
     res.send("Error adding employee. Try again later.");
   }
 });
-
-
 
 // Delete Employee
 app.post("/delete-employee/:id", isAuthenticated, async (req, res) => {
