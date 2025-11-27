@@ -66,9 +66,9 @@
       margin-bottom: 8px;
     }
     
-    input, textarea {
+    input, select, textarea {
       width: 100%;
-      padding: 14px 16px;
+      padding: 16px;
       border: 2px solid #e5e7eb;
       border-radius: 8px;
       font-size: 15px;
@@ -78,7 +78,7 @@
       font-family: inherit;
     }
     
-    input:focus, textarea:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #6366f1;
       background: #ffffff;
@@ -87,6 +87,10 @@
     
     input::placeholder, textarea::placeholder {
       color: #9ca3af;
+    }
+
+    select {
+      cursor: pointer;
     }
     
     textarea {
@@ -228,6 +232,15 @@
           
           <div class="form-field">
             <input type="number" name="pincode" placeholder="Pincode" required>
+          </div>
+
+          <div class="form-field">
+            <select name="account_type" required>
+              <option value="">-- Select Account Type --</option>
+              <option value="Savings" selected>Savings Account</option>
+              <option value="Current">Current Account</option>
+              <option value="Salary">Salary Account</option>
+            </select>
           </div>
 
           <div class="form-field">

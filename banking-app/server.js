@@ -329,17 +329,26 @@ app.post("/employee/add-customer", isEmployee, async (req, res) => {
     city,
     state,
     pincode,
+    account_type,  // ⬅️ ADD THIS
     balance
   } = req.body;
 
   const parents_name = lineage;
 
   try {
-    // Minimum balance check
-    if (!balance || parseFloat(balance) < 500) {
+    // Minimum balance validation based on account type
+    const minBalanceRules = {
+      'Savings': 500,
+      'Current': 5000,
+      'Salary': 0
+    };
+
+    const minRequired = minBalanceRules[account_type] || 500;
+
+    if (!balance || parseFloat(balance) < minRequired) {
       return res.render("addCustomer", {
         employee: req.session.employee,
-        error: "Initial balance should be at least ₹500.",
+        error: `Initial balance for ${account_type} account should be at least ₹${minRequired}.`,
         success: null
       });
     }
@@ -356,18 +365,19 @@ app.post("/employee/add-customer", isEmployee, async (req, res) => {
       newAccountNo = "NOVABANK" + lastNum.toString().padStart(3, "0");
     }
 
-    // Insert customer
+    // Insert customer with account_type
     await db.query(
       `INSERT INTO customers 
-      (account_no, fullname, dob, parents_name, email, phone, aadhar, address, city, state, pincode, balance)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
-      [newAccountNo, fullname, dob, parents_name, email, phone, aadhar, address, city, state, pincode, balance]
+      (account_no, fullname, dob, parents_name, email, phone, aadhar, address, city, state, pincode, account_type, balance)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
+      [newAccountNo, fullname, dob, parents_name, email, phone, aadhar, address, city, state, pincode, account_type, balance]
+      // ⬅️ Added account_type as $12
     );
 
     res.render("addCustomer", {
       employee: req.session.employee,
       error: null,
-      success: `Customer added successfully! Account Number: ${newAccountNo}`
+      success: `Customer added successfully! Account Number: ${newAccountNo} | Type: ${account_type}`
     });
   } catch (err) {
     console.error("DB Error:", err);
@@ -378,7 +388,6 @@ app.post("/employee/add-customer", isEmployee, async (req, res) => {
     });
   }
 });
-
 
 // ---------------- VIEW CUSTOMER ROUTES ---------------- //
 
